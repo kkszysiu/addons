@@ -207,7 +207,7 @@ def add_addon(request):
             form = AddAddonForm()
             return render_to_response(
                     'main/form.html',
-                    {'form':form, 'user': request.user, 'site_name': Site.objects.get_current().name, 'page_name': page_name})
+                    {'form_id': 'add', 'form': form, 'user': request.user, 'site_name': Site.objects.get_current().name, 'page_name': page_name})
     else:
         return render_to_response('main/msg.html', {'user': request.user, 'msg': _('Oops! Something went wrong.'), 'redirect_to': "/"})
 
@@ -244,7 +244,7 @@ def edit_addon(request, id):
             page_name = _("Edit addon")
             return render_to_response(
                     'main/form.html',
-                    {'form':form, 'user': request.user, 'site_name': Site.objects.get_current().name, 'page_name': page_name})
+                    {'form_id': 'add', 'form': form, 'user': request.user, 'site_name': Site.objects.get_current().name, 'page_name': page_name})
     else:
         return render_to_response('main/msg.html', {'user': request.user, 'msg': _('Oops! Something went wrong.'), 'redirect_to': "/"})
 

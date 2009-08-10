@@ -10,7 +10,10 @@
 {% endblock %}
 
 {% block meta %}
-
+    {% if form_id == 'add' %}
+	<script type="text/javascript" src="/stuff/template/js/showdown.js"></script>
+	<script type="text/javascript" src="/stuff/template/js/showdown-gui.js"></script>
+    {% endif %}
 {% endblock %}
 
 {% block site_name %}
@@ -41,6 +44,23 @@
         <form action="" method="post" id="addon_form" style="margin-left: 8px; padding: 16px 16px 40px 16px; -moz-border-radius: 11px; -khtml-border-radius: 11px; -webkit-border-radius: 11px; border-radius: 5px; background: #fff; border: 1px solid #e5e5e5; -moz-box-shadow: rgba(200,200,200,1) 0 4px 18px; -webkit-box-shadow: rgba(200,200,200,1) 0 4px 18px; -khtml-box-shadow: rgba(200,200,200,1) 0 4px 18px; box-shadow: rgba(200,200,200,1) 0 4px 18px;">
                 <table>
                 {{ form }}
+                {% if form_id == 'add' %}
+                <tr>
+                    <th>
+                        <label for="id_preview">Preview:</label>
+                    </th>
+                    <td>
+                        <textarea id="outputPane" cols="80" rows="20" readonly="readonly"></textarea>
+                        <div id="previewPane" class="pane">
+                                <noscript>
+                                        <h2>You'll need to enable Javascript to use this tool.</h2>
+                                </noscript>
+                        </div>
+                    </td>
+                </tr>
+                <input type="hidden" id="paneSetting" value="previewPane"/>
+                <input type="hidden" id="convertTextSetting" value="delayed"/>
+                {% endif %}
                 </table>
                 <input type="submit" value="Add" class="default" name="add" />
         </form>

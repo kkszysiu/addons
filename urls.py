@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     (r'^logout/$', 'django.contrib.auth.views.logout'),
 
     #thats should be removed in production use
-    (r'^stuff/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/kkszysiu/Ubuntu One/My Files/django/addons/stuff/'}),
+    (r'^stuff/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/kkszysiu/code/git/addons/stuff/'}),
 
     #comments
     (r'^comments/', include('django.contrib.comments.urls')),
