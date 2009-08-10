@@ -1,0 +1,77 @@
+{% extends "main/body.html" %}
+{% load truncate_filters %}
+{% load i18n %}
+
+{% block title %}
+	{{site_name}} - Category: {{ category.name }}
+{% endblock %}
+
+{% block meta %}
+{% endblock %}
+
+{% block site_name %}
+	{{site_name}} - Home
+{% endblock %}
+
+{% block navbar %}
+	{% if user.is_authenticated %}
+		<!--<p>Hello, <a title="User home" href="/user/profile/">{{ user.username }}</a> |  -->
+                <p>Hello, {{ user.username }} |
+                {% if is_author %}
+                    <a href="/addon/{{ addon.id }}/edit/">edit addon</a> |
+                    <a href="/addon/{{ addon.id }}/add_screenshot/">add screenshot</a> |
+                    <a href="/addon/{{ addon.id }}/add_version/">add version info</a> |
+                {% endif %}
+		<a href="/addon/add/">add new addon</a> | <a href="/addon/my/">my addons</a> | <a href="/logout/">logout</a></p>
+	{% else %}
+		<p>Welcome, Guest |
+		<a href="/login/">login</a> | <a href="/registration/">register</a></p>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+<h2 class="title">Show addons for category: <a href="/tag/{{ tag.name }}">{{ tag.name }}</a></h2>
+    <div style ="margin:7em auto; margin-left: 30px; margin-right: 30px;">
+    {% for addon in addons.object_list %}
+        <div style="margin-bottom: 10px; padding: 16px 16px 40px 16px; -moz-border-radius: 11px; -khtml-border-radius: 11px; -webkit-border-radius: 11px; border-radius: 5px; background: #fff; border: 1px solid #e5e5e5; -moz-box-shadow: rgba(200,200,200,1) 0 4px 18px; -webkit-box-shadow: rgba(200,200,200,1) 0 4px 18px; -khtml-box-shadow: rgba(200,200,200,1) 0 4px 18px; box-shadow: rgba(200,200,200,1) 0 4px 18px;">
+            <a href="/addon/{{ addon.id }}/">
+            {% if addon.screenshot_set.all %}
+                {% for screen in addon.screenshot_set.all %}
+                    {% if forloop.first %}
+                        <img src="{{ screen.screenshot.url_128x128 }}" alt="{{ screen.screenshot.description }}" width="128" height="128" style="float: left; margin-right: 20px; padding: 8px; background:#FFFFFF; -ms-interpolation-mode: bicubic; display: block; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px; box-shadow:0 2px 4px #C8C8C8; -moz-box-shadow:0 2px 4px #C8C8C8; -webkit-box-shadow:0 2px 4px #C8C8C8;"/>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <img src="/stuff/template/images/no_screenshot.png" alt="no screenshot" width="128" height="128" style="float: left; margin-right: 20px; padding: 8px; background:#FFFFFF; -ms-interpolation-mode: bicubic; display: block; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px; box-shadow:0 2px 4px #C8C8C8; -moz-box-shadow:0 2px 4px #C8C8C8; -webkit-box-shadow:0 2px 4px #C8C8C8;"/>
+            {% endif %}
+            </a>
+            <h3><a href="/addon/{{ addon.id }}/">{{ addon.name }}</a> <small style="font-size: 0.7em;">by <!--<a href="/users/{{ addon.author.username }}">{{ addon.author.username }}</a>-->{{ addon.author.username }}</small></h3>
+            <p>{{ addon.description|truncate_chars:255 }}</p>
+            Added: {{ addon.pub_date|timesince }} | Modified: {{ addon.modified|timesince }} | Downloads: {{ addon.n_downloads }}
+            <div style="clear:both;"></div>
+        </div>
+    {% endfor  %}
+    </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if addons.has_previous %}
+                <a href="?page={{ addons.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ addons.number }} of {{ addons.paginator.num_pages }}.
+            </span>
+
+            {% if addons.has_next %}
+                <a href="?page={{ addons.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+    {% if has_previous %}
+            <div style="text-align:center;"><a href="?page={{ previous }}"><b>Previous ></b></a></div>
+    {% endif %}
+    {% if has_next %}
+            <div style="text-align:center;"><a href="?page={{ next }}"><b>< Next</b></a></div>
+    {% endif %}
+{% endblock %}

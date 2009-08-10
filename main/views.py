@@ -13,7 +13,7 @@ from django.contrib.sites.models import Site
 
 from addons.main.models import Addon, Category, Screenshot, Versioning
 
-from tagging.models import Tag
+from tagging.models import Tag, TaggedItem
 from tagging import utils
 from datetime import datetime
 
@@ -425,6 +425,26 @@ def show_category(request, id, sortby = ''):
         addons = paginator.page(paginator.num_pages)
 
     return render_to_response('main/show_category.html', {'category': cat, 'addons':  addons, 'user': request.user, 'site_name': Site.objects.get_current().name, 'page_name': page_name})
+
+def show_addons_by_tag(request, tag):
+    tag = get_object_or_404(Tag, name=tag)
+    addons = TaggedItem.objects.get_by_model(Addon, tag)
+    #tags = tag_linkify(Tag.objects.get_for_object(addon))
+    paginator = Paginator(addons, 25)
+
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    # If page request (9999) is out of range, deliver last page of results.
+    try:
+        addons = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        addons = paginator.page(paginator.num_pages)
+
+    return render_to_response('main/addons_by_tag.html', {'tag': tag, 'addons':  addons, 'user': request.user, 'site_name': Site.objects.get_current().name})
 
 @login_required(redirect_field_name='/login/')
 def comment_post_wrapper(request):

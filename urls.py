@@ -5,10 +5,11 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    #general
     (r'^$', 'addons.main.views.index'),
     (r'^login/$', 'addons.main.views.login_user'),
     (r'^registration/$', 'addons.main.views.register'),
-#    (r'^login/$', 'django.contrib.auth.views.login'),
+    #(r'^login/$', 'django.contrib.auth.views.login'),
     (r'^logout/$', 'django.contrib.auth.views.logout'),
 
     #thats should be removed in production use
@@ -19,9 +20,14 @@ urlpatterns = patterns('',
     (r'^comments/post/', 'addons.main.views.comment_post_wrapper'),
     (r'^comments/posted/(.*)', 'addons.main.views.comment_posted'),
 
-    #Addons
+    #categories
     (r'^category/(?P<id>[0-9]+)/$', 'addons.main.views.show_category'),
     (r'^category/(?P<id>[0-9]+)/(?P<sortby>.*)/$', 'addons.main.views.show_category'),
+
+    #tags
+    (r'^tag/(.*)/$', 'addons.main.views.show_addons_by_tag'),
+
+    #addons
     (r'^addon/my/$', 'addons.main.views.my_addons'),
     (r'^addon/add/$', 'addons.main.views.add_addon'),
     (r'^addon/(?P<id>[0-9]+)/edit/$', 'addons.main.views.edit_addon'),
