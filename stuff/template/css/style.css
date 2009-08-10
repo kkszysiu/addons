@@ -431,8 +431,6 @@ ul.meta li{
 }
 /* TAGS */
 #tags{
-	font-size: 70%;
-	height: 200px;
 	margin:0;
         padding:0;
 }
@@ -448,6 +446,7 @@ ul.meta li{
 	padding:0 10px 10px;
 }
 #tags #tag-cloud a{
+        font-size: 90%;
 	padding:0 .5em 0 0;
 	white-space:nowrap;
 }
