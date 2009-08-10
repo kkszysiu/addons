@@ -1,6 +1,7 @@
 {% extends "main/body.html" %}
 {% load comments %}
 {% load gravatar %}
+{% load markup %}
 {% load truncate_filters %}
 {% load smart_if %}
 {% load i18n %}
@@ -63,13 +64,13 @@
     <div style="padding-right: 320px;">
         <div style="float:left; width: 100%;">
             <div style="padding: 18px; background: #FFFFFF; margin-bottom: 20px; -moz-border-radius: 6px; -khtml-border-radius: 6px; -webkit-border-radius: 6px; border-color: #dfdfdf; border-style: solid; border-width: 1px; box-shadow:0 6px 10px #C8C8C8; -moz-box-shadow:0 6px 10px #C8C8C8; -webkit-box-shadow:0 6px 10px #C8C8C8;">
-                <p>{{ addon.description|urlize }}</p>
+                <p>{{ addon.description|markdown:"safe"|urlize }}</p>
             </div>
             <div style="padding: 18px; background: #FFFFFF; margin-bottom: 20px; -moz-border-radius: 6px; -khtml-border-radius: 6px; -webkit-border-radius: 6px; border-color: #dfdfdf; border-style: solid; border-width: 1px; box-shadow:0 6px 10px #C8C8C8; -moz-box-shadow:0 6px 10px #C8C8C8; -webkit-box-shadow:0 6px 10px #C8C8C8;">
                 {% if versions %}
                     {% for version in versions %}
                         <h5><a href="#{{ version.version }}">{{ version.version }}</a> - "{{ version.codename }}"</h5>  {% if is_author %}<a href="/addon/{{ addon.id }}/delete_version/{{ version.id }}" title="Delete that version info."><img src="/stuff/images/delete.png"/></a>{% endif %}
-                        <p>{{ version.description|urlize }}</p>
+                        <p>{{ version.description|markdown:"safe"|urlize }}</p>
                         <div style="margin-bottom: 7px;border: 1px solid #e5e5e5;"></div>
                         {% endfor %}
                 {% else %}

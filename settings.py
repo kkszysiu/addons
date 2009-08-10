@@ -97,6 +97,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.comments',
     'django.contrib.admin',
+    'django.contrib.markup',
     'addons.main',
     'addons.tagging',
     'addons.debug_toolbar'
