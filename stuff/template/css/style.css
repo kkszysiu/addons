@@ -503,7 +503,8 @@ ul.meta li{
 #id_comment,
 #id_description,
 #id_preview,
-#outputPane {
+#outputPane,
+#previewPane {
 	width: 97%;
 	padding: 3px;
 	margin-top: 2px;
@@ -524,15 +525,6 @@ ul.meta li{
 
 #id_file,
 #id_screenshot {
-	width: 100%;
-	padding: 3px;
-	margin-top: 2px;
-	margin-right: 6px;
-	border: 1px solid #e5e5e5;
-	background: #fbfbfb;
-}
-
-#previewPane {
 	width: 100%;
 	padding: 3px;
 	margin-top: 2px;
