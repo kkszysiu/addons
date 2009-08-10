@@ -174,7 +174,7 @@ def my_addons(request, sortby = ''):
         return render_to_response('main/msg.html', {'user': request.user, 'msg': _('Oops! Something went wrong.'), 'redirect_to': "/"})
 
 class AddAddonForm(forms.ModelForm):
-    #tags = forms.CharField(required=False, max_length=255, default=' trest')
+    tags = forms.CharField(required=False, max_length=255)
     class Meta:
         # Nazwa modelu
         model = Addon
@@ -188,11 +188,9 @@ def add_addon(request):
             data['name'] = stripTags(data['name'])
             data['description'] = stripTags(data['description'])
             data['pub_date'] = datetime.now()
-            data['n_comments'] = 0
             data['n_downloads'] = 0
             data['modified'] = datetime.now()
             data['rating'] = 0
-            data['tags'] = data['name']+' '+stripTags(data['tags'])
             form = AddAddonForm(data)
             if form.is_valid():
                 # zapisanie komentarza do bazy
@@ -200,8 +198,10 @@ def add_addon(request):
                 data.author = request.user
                 data.rating = 0
                 data.save()
-                #Tag.objects.update_tags(data, data['tags'])
+                Tag.objects.update_tags(data, request.POST['tags'])
                 return render_to_response('main/msg.html', {'user': request.user, 'msg': _('Congratulations! Your addon was added successfuly.'), 'redirect_to': "/addon/"+str(data.id)})
+            else:
+                return render_to_response('main/msg.html', {'user': request.user, 'msg': _('You did not filled all required fields.'), 'redirect_to': "/addon/"+str(data.id)})
         else:
             page_name = _("Add new addon")
             form = AddAddonForm()
@@ -235,7 +235,6 @@ def edit_addon(request, id):
                 data.author = request.user
                 data.id = addon.id
                 data.pub_date = addon.pub_date
-                data.n_comments = addon.n_comments
                 data.n_downloads = addon.n_downloads
                 data.rating = addon.rating
                 data.save()

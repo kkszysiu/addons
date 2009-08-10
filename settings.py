@@ -11,7 +11,7 @@ MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'addons'             # Or path to database file if using sqlite3.
-DATABASE_USER = 'root'             # Not used with sqlite3.
+DATABASE_USER = 'django'             # Not used with sqlite3.
 DATABASE_PASSWORD = 'xxxxxx'         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
@@ -35,7 +35,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/home/kkszysiu/Ubuntu One/My Files/django/addons/stuff/'
+MEDIA_ROOT = '/home/kkszysiu/code/git/addons/stuff/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -83,7 +83,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 TEMPLATE_DIRS = (
-    '/home/kkszysiu/Ubuntu One/My Files/django/addons/views/'
+    '/home/kkszysiu/code/git/addons/views/'
 )
 
 LOGIN_REDIRECT_URL = '/'
