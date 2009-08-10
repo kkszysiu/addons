@@ -1,0 +1,49 @@
+{% extends "main/body.html" %}
+{% load comments %}
+{% load gravatar %}
+{% load truncate_filters %}
+{% load smart_if %}
+{% load i18n %}
+
+{% block title %}
+	{{site_name}} - {{ pagename }}
+{% endblock %}
+
+{% block meta %}
+
+{% endblock %}
+
+{% block site_name %}
+	{{site_name}} - Home
+{% endblock %}
+
+{% block navbar %}
+	{% if user.is_authenticated %}
+		<!--<p>Hello, <a title="User home" href="/user/profile/">{{ user.username }}</a> |  -->
+                <p>Hello, {{ user.username }} |
+                {% if is_author %}
+                    <a href="/addon/{{ addon.id }}/edit/">edit addon</a> |
+                    <a href="/addon/{{ addon.id }}/add_screenshot/">add screenshot</a> |
+                    <a href="/addon/{{ addon.id }}/add_version/">add version info</a> |
+                {% endif %}
+		<a href="/addon/add/">add new addon</a> | <a href="/addon/my/">my addons</a> | <a href="/logout/">logout</a></p>
+	{% else %}
+		<p>Welcome, Guest |
+		<a href="/login/">login</a> | <a href="/registration/">register</a></p>
+	{% endif %}
+{% endblock %}
+
+
+{% block content %}
+    <h2 class="title">{{ page_name }}</h2>
+    <!--<p class="addons-description">{{ addon.description }}</p>-->
+    <div style ="margin:7em auto; width:460px;">
+        <form action="" method="post" id="addon_form" style="margin-left: 8px; padding: 16px 16px 40px 16px; -moz-border-radius: 11px; -khtml-border-radius: 11px; -webkit-border-radius: 11px; border-radius: 5px; background: #fff; border: 1px solid #e5e5e5; -moz-box-shadow: rgba(200,200,200,1) 0 4px 18px; -webkit-box-shadow: rgba(200,200,200,1) 0 4px 18px; -khtml-box-shadow: rgba(200,200,200,1) 0 4px 18px; box-shadow: rgba(200,200,200,1) 0 4px 18px;">
+                <table>
+                {{ form }}
+                </table>
+                <input type="submit" value="Add" class="default" name="add" />
+        </form>
+    </div>
+{% endblock %}
+

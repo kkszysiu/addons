@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<title>{% block title %}Addons{% endblock %}</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico" />
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+	<link rel="stylesheet" type="text/css" href="/stuff/template/css/style.css" media="all" />
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+
+	{% block meta %}{% endblock %}
+</head>
+
+<body>
+
+  <!--[if lt IE 7]>
+  <div style='border: 1px solid #F7941D; background: #FEEFDA; text-align: center; clear: both; height: 75px; position: relative;'>
+    <div style='position: absolute; right: 3px; top: 3px; font-family: courier new; font-weight: bold;'><a href='#' onclick='javascript:this.parentNode.parentNode.style.display="none"; return false;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-cornerx.jpg' style='border: none;' alt='Close this notice'/></a></div>
+    <div style='width: 640px; margin: 0 auto; text-align: left; padding: 0; overflow: hidden; color: black;'>
+      <div style='width: 75px; float: left;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-warning.jpg' alt='Warning!'/></div>
+      <div style='width: 275px; float: left; font-family: Arial, sans-serif;'>
+        <div style='font-size: 14px; font-weight: bold; margin-top: 12px;'>You are using an outdated browser</div>
+        <div style='font-size: 12px; margin-top: 6px; line-height: 12px;'>For a better experience using this site, please upgrade to a modern web browser.</div>
+      </div>
+      <div style='width: 75px; float: left;'><a href='http://www.firefox.com' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-firefox.jpg' style='border: none;' alt='Get Firefox 3.5'/></a></div>
+      <div style='width: 75px; float: left;'><a href='http://www.browserforthebetter.com/download.html' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-ie8.jpg' style='border: none;' alt='Get Internet Explorer 8'/></a></div>
+      <div style='width: 73px; float: left;'><a href='http://www.apple.com/safari/download/' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-safari.jpg' style='border: none;' alt='Get Safari 4'/></a></div>
+      <div style='float: left;'><a href='http://www.google.com/chrome' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-chrome.jpg' style='border: none;' alt='Get Google Chrome'/></a></div>
+    </div>
+  </div>
+  <![endif]-->
+
+<div id="doc">
+	<div id="head">
+		<img width="32" height="32" alt="" src="/stuff/template/images/addons_logo.png" id="header-logo"/>
+		<h1 id="site-heading">
+			<a title="Visit Site" href="/">
+				<span id="site-title">{% block site_name %}Addons{% endblock %}</span>
+			</a>
+		</h1>
+
+		<div id="head-info">
+			<div id="user_info">
+				{% block navbar %}{% endblock %}
+			</div>
+		</div>
+	</div>
+
+<div id="body" class="addons-home">
+  <div class="c">
+	{% block content %}{% endblock %}
+  </div><!-- .c -->
+</div><!-- #body -->
+
+<div id="ft">
+  <div class="c">
+
+    <p class="copyright">&copy; 2009 Krzysztof Klinikowski</p>
+  
+  </div><!-- .c -->
+</div><!-- #ft -->
+
+</div><!-- .doc -->
+</body>
+
+</html>

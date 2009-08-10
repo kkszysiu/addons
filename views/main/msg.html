@@ -1,0 +1,12 @@
+{% extends "main/body.html" %}
+
+{% load i18n %}
+
+{% block meta %}
+<meta http-equiv="refresh" content="2;url={{ redirect_to }}">
+{% endblock %}
+
+{% block content %}
+<div class="msg"><p>{{ msg }}</p><p>{% trans "You will be redirected back in 2 seconds." %} <a href="{{ redirect_to }}">{% trans "Click here if you don't want to wait" %}</a></p></div>
+{% endblock %}
+

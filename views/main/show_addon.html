@@ -1,0 +1,168 @@
+{% extends "main/body.html" %}
+{% load comments %}
+{% load gravatar %}
+{% load truncate_filters %}
+{% load smart_if %}
+{% load i18n %}
+
+{% block title %}
+	{{site_name}} - Addon: {{ addon.name }}
+{% endblock %}
+
+{% block meta %}
+	<script src="/stuff/template/js/jquery.timers.js" type="text/javascript"></script>
+	<script src="/stuff/template/js/mbTooltip.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="/stuff/template/css/mbTooltip.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="/stuff/template/css/prettyPhoto.css" type="text/css" media="screen"/>
+	<script src="/stuff/template/js/jquery.prettyPhoto.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+                        $("[title]").mbTooltip({
+                            opacity : .90, //opacity
+                            wait:500, //before show
+                            ancor:"mouse", //"parent"
+                            cssClass:"default", // default = default
+                            timePerWord:70, //time to show in milliseconds per word
+                            hasArrow:false,
+                            color:"white",
+                            imgPath:"stuff/template/images/",
+                            hasShadow:false,
+                            fade:300
+                        });
+			$("a[rel^='prettyPhoto']").prettyPhoto();
+		});
+	</script>
+{% endblock %}
+
+{% block site_name %}
+	{{site_name}} - Home
+{% endblock %}
+
+{% block navbar %}
+	{% if user.is_authenticated %}
+		<!--<p>Hello, <a title="User home" href="/user/profile/">{{ user.username }}</a> |  -->
+                <p>Hello, {{ user.username }} |
+                {% if is_author %}
+                    <a href="/addon/{{ addon.id }}/edit/">edit addon</a> |
+                    <a href="/addon/{{ addon.id }}/add_screenshot/">add screenshot</a> |
+                    <a href="/addon/{{ addon.id }}/add_version/">add version info</a> |
+                {% endif %}
+		<a href="/addon/add/">add new addon</a> | <a href="/addon/my/">my addons</a> | <a href="/logout/">logout</a></p>
+	{% else %}
+		<p>Welcome, Guest |
+		<a href="/login/">login</a> | <a href="/registration/">register</a></p>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <h2 class="title" style="margin-left: 10px;">{{ addon.name }} <small style="font-size: 0.5em;">by {{ addon.author.username }} from category <a href="/category/{{ addon.category.id }}">{{ addon.category.name }}</a></small></h2>
+    <!--<p class="addons-description">{{ addon.description }}</p>-->
+
+    <div style="padding-right: 320px;">
+        <div style="float:left; width: 100%;">
+            <div style="padding: 18px; background: #FFFFFF; margin-bottom: 20px; -moz-border-radius: 6px; -khtml-border-radius: 6px; -webkit-border-radius: 6px; border-color: #dfdfdf; border-style: solid; border-width: 1px; box-shadow:0 6px 10px #C8C8C8; -moz-box-shadow:0 6px 10px #C8C8C8; -webkit-box-shadow:0 6px 10px #C8C8C8;">
+                <p>{{ addon.description }}</p>
+            </div>
+            <div style="padding: 18px; background: #FFFFFF; margin-bottom: 20px; -moz-border-radius: 6px; -khtml-border-radius: 6px; -webkit-border-radius: 6px; border-color: #dfdfdf; border-style: solid; border-width: 1px; box-shadow:0 6px 10px #C8C8C8; -moz-box-shadow:0 6px 10px #C8C8C8; -webkit-box-shadow:0 6px 10px #C8C8C8;">
+                {% if versions %}
+                    {% for version in versions %}
+                        <h5><a href="#{{ version.version }}">{{ version.version }}</a> - "{{ version.codename }}"</h5>  {% if is_author %}<a href="/addon/{{ addon.id }}/delete_version/{{ version.id }}" title="Delete that version info."><img src="/stuff/images/delete.png"/></a>{% endif %}
+                        <p>{{ version.description }}</p>
+                        <div style="margin-bottom: 7px;border: 1px solid #e5e5e5;"></div>
+                        {% endfor %}
+                {% else %}
+                    <p>Theres no versions info for this addon.</p>
+                {% endif %}
+            </div>
+
+
+            <div style="padding: 18px; background: #FFFFFF; margin-bottom: 20px; -moz-border-radius: 6px; -khtml-border-radius: 6px; -webkit-border-radius: 6px; border-color: #dfdfdf; border-style: solid; border-width: 1px; box-shadow:0 6px 10px #C8C8C8; -moz-box-shadow:0 6px 10px #C8C8C8; -webkit-box-shadow:0 6px 10px #C8C8C8;">
+                <h5>Download files:</h5>
+                {% if versions %}
+                    {% for v in versions %}
+                        {% if v.file %}
+                            {{ v.version }} - <a href="/addon/{{ addon.id }}/download/{{ v.id }}/">Download</a><br/>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    Theres no files for this addon.
+                {% endif %}
+            </div>
+
+            <div style="padding: 18px; background: #FFFFFF; margin-bottom: 20px; -moz-border-radius: 6px; -khtml-border-radius: 6px; -webkit-border-radius: 6px; border-color: #dfdfdf; border-style: solid; border-width: 1px; box-shadow:0 6px 10px #C8C8C8; -moz-box-shadow:0 6px 10px #C8C8C8; -webkit-box-shadow:0 6px 10px #C8C8C8;">
+                <h5>Comments:</h5>                
+                {% get_comment_list for addon as comment_list %}
+                {% for comment in comment_list %}
+                    {% if comment.user_name == addon.author.username %}
+                        <div class="comment" style="background:#FFFBCC; border:1px solid #E6DB55; margin: 15px 0 10px; padding:5px 5px 10px 10px;">
+                            <p><a href="{{ comment.user_url }}">{{ comment.user_name }}</a> - posted {{ comment.submit_date|timesince }} ago</p>
+                            <div style="background:#FBFBFB; border:1px solid #E5E5E5; padding: 4px; float:left; margin-right: 10px;">{% gravatar addon.author 32 %}</div> <p>{{ comment.comment }}</p>
+                            <div style="clear:both;"></div>
+                        </div>
+                    {% elif comment.user_name == user.username %}
+                        <div class="comment" style="background-color:#FFEBE8; border:1px solid #CC0000; margin: 15px 0 10px; padding:5px 5px 10px 10px;">
+                            <p><a href="{{ comment.user_url }}">{{ comment.user_name }}</a> - posted {{ comment.submit_date|timesince }} ago</p>
+                            <div style="background:#FBFBFB; border:1px solid #E5E5E5; padding: 4px; float:left; margin-right: 10px;">{% gravatar user 32 %}</div> <p>{{ comment.comment }}</p>
+                            <div style="clear:both;"></div>
+                        </div>
+                    {% elif comment.user_name != user.username and comment.user_name != addon.author.username %}
+                        <div class="comment" style="background:#E4F2FD; border:1px solid #C6D9E9; margin: 15px 0 10px; padding:5px 5px 10px 10px;">
+                            <p><a href="{{ comment.user_url }}">{{ comment.user_name }}</a> - posted {{ comment.submit_date|timesince }} ago</p>
+                            <div style="background:#FBFBFB; border:1px solid #E5E5E5; padding: 4px; float:left; margin-right: 10px;">{% gravatar comment.user 32 %}</div> <p>{{ comment.comment }}</p>
+                            <div style="clear:both;"></div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                {% if user.is_authenticated %}
+                    <div style="border: 1px solid #e5e5e5; margin-top: 10px; margin-bottom: 10px;"></div>
+                    <div id="comments_form" style="width: 500px; margin-bottom: 15px; border-bottom: 1px; margin:0 auto; padding: 0 auto;">
+                        {% render_comment_form for addon %}
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+        <div style="float:left; margin:0 -320px 0 20px; width:300px;" id="feature-screenshots">
+            <div style="text-align:center; padding: 18px; background: #FFFFFF; margin-bottom: 20px; -moz-border-radius: 6px; -khtml-border-radius: 6px; -webkit-border-radius: 6px; border-color: #dfdfdf; border-style: solid; border-width: 1px; box-shadow:0 6px 10px #C8C8C8; -moz-box-shadow:0 6px 10px #C8C8C8; -webkit-box-shadow:0 6px 10px #C8C8C8;">
+            {% if screenshots %}
+                {% for screenshot in screenshots %}
+                    {% if forloop.first %}
+                        {% if is_author %}<br/><a href="/addon/{{ addon.id }}/delete_screenshots/">Delete screenshots</a>{% endif %}
+                        <a href="{{ screenshot.screenshot.url }}" rel="prettyPhoto[gallery]"><img src="{{ screenshot.screenshot.url_256x256 }}" title="{{ screenshot.description }}"/></a>
+                        <div style="margin-bottom: 5px;"></div>
+                    {% else %}
+                        <a href="{{ screenshot.screenshot.url }}" rel="prettyPhoto[gallery]"><img src="{{ screenshot.screenshot.url_128x128 }}" title="{{ screenshot.description }}" style="float: left; border-color: #dfdfdf; border-style: solid; border-width: 1px;"/></a>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <img src="/stuff/template/images/no_screenshot.png" title="That addon have no screenshot added yet."/>
+            {% endif %}
+            <div style="clear:both;"></div>
+            </div>
+
+            <div style="padding: 18px; background: #FFFFFF; margin-bottom: 20px; -moz-border-radius: 6px; -khtml-border-radius: 6px; -webkit-border-radius: 6px; border-color: #dfdfdf; border-style: solid; border-width: 1px; box-shadow:0 6px 10px #C8C8C8; -moz-box-shadow:0 6px 10px #C8C8C8; -webkit-box-shadow:0 6px 10px #C8C8C8;">
+                <h3>Statistics</h3>
+                <p>Downloads: {{ addon.n_downloads }}</p>
+                <!--
+                <p>Average Rating: <div class="rating"><img title="4 out of 5" alt="4 out of 5" src="/images/ratings/rating-4.png"/> based on <span id="rating-count">302</span> ratings</div></p>
+                -->
+                {% get_comment_count for addon as comment_count %}
+                <p>Comments: {{ comment_count }}</p>
+                <p>Last Updated: {{ addon.modified|timesince }} ago</p>
+            <div style="clear:both;"></div>
+            </div>
+
+            <div style="padding: 18px; background: #FFFFFF; margin-bottom: 20px; -moz-border-radius: 6px; -khtml-border-radius: 6px; -webkit-border-radius: 6px; border-color: #dfdfdf; border-style: solid; border-width: 1px; box-shadow:0 6px 10px #C8C8C8; -moz-box-shadow:0 6px 10px #C8C8C8; -webkit-box-shadow:0 6px 10px #C8C8C8;">
+                <h3>Tags</h3>
+                <div>
+                    {{ tags|safe }}
+                </div>
+            <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
