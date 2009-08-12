@@ -1,0 +1,76 @@
+{% extends "main/body.html" %}
+{% load smart_if %}
+{% load i18n %}
+
+{% block title %}
+	{{site_name}} - Addon: {{ addon.name }} - Screenshots
+{% endblock %}
+
+{% block meta %}
+	<script src="/stuff/template/js/jquery.timers.js" type="text/javascript"></script>
+	<script src="/stuff/template/js/mbTooltip.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="/stuff/template/css/mbTooltip.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="/stuff/template/css/prettyPhoto.css" type="text/css" media="screen"/>
+	<script src="/stuff/template/js/jquery.prettyPhoto.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+                        $("[title]").mbTooltip({
+                            opacity : .90, //opacity
+                            wait:500, //before show
+                            ancor:"mouse", //"parent"
+                            cssClass:"default", // default = default
+                            timePerWord:70, //time to show in milliseconds per word
+                            hasArrow:false,
+                            color:"white",
+                            imgPath:"stuff/template/images/",
+                            hasShadow:false,
+                            fade:300
+                        });
+			$("a[rel^='prettyPhoto']").prettyPhoto();
+		});
+	</script>
+{% endblock %}
+
+{% block site_name %}
+	{{site_name}} - Home
+{% endblock %}
+
+{% block navbar %}
+	{% if user.is_authenticated %}
+		<!--<p>Hello, <a title="User home" href="/user/profile/">{{ user.username }}</a> |  -->
+                <p>Hello, {{ user.username }} |
+                {% if is_author %}
+                    <a href="/addon/{{ addon.id }}/edit/">edit addon</a> |
+                    <a href="/addon/{{ addon.id }}/add_screenshot/">add screenshot</a> |
+                    <a href="/addon/{{ addon.id }}/add_version/">add version info</a> |
+                {% endif %}
+		<a href="/addon/add/">add new addon</a> | <a href="/addon/my/">my addons</a> | <a href="/logout/">logout</a></p>
+	{% else %}
+		<p>Welcome, Guest |
+		<a href="/login/">login</a> | <a href="/registration/">register</a></p>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<h2 class="title" style="margin-left: 10px;"><a href="/addon/{{ addon.id }}">{{ addon.name }}</a> - Screenshots</h2>
+    <!--<p class="addons-description">{{ addon.description }}</p>-->
+
+    <div style ="margin: 0; padding: 0; margin:7em auto; margin-left: 30px; margin-right: 30px; float: left;">
+    {% if addon %}
+        {% if addon.screenshot_set.all %}
+            {% for screen in addon.screenshot_set.all %}
+            <div style="float: left; padding: 16px 16px 16px 16px; margin: 15px; -moz-border-radius: 11px; -khtml-border-radius: 11px; -webkit-border-radius: 11px; border-radius: 5px; background: #fff; border: 1px solid #e5e5e5; -moz-box-shadow: rgba(200,200,200,1) 0 4px 18px; -webkit-box-shadow: rgba(200,200,200,1) 0 4px 18px; -khtml-box-shadow: rgba(200,200,200,1) 0 4px 18px; box-shadow: rgba(200,200,200,1) 0 4px 18px;">
+                    <div>
+                        <img src="{{ screen.screenshot.url_128x128 }}" width="128" height="128" style="padding: 8px; background:#FFFFFF; -ms-interpolation-mode: bicubic; display: block; -moz-border-radius: 3px; -khtml-border-radius: 3px; -webkit-border-radius: 3px; box-shadow:0 2px 4px #C8C8C8; -moz-box-shadow:0 2px 4px #C8C8C8; -webkit-box-shadow:0 2px 4px #C8C8C8;"/>
+                    </div>
+                    <div style="text-align:center; margin-top: 5px;"><a href="/addon/{{ addon.id }}/delete_screenshot/{{ screen.id }}/">delete screenshot</a></div>
+                <div style="clear:both;"></div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+    </div>
+
+{% endblock %}

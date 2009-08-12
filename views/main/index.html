@@ -1,5 +1,6 @@
 {% extends "main/body.html" %}
-{% load truncate_filters %}  
+{% load truncate_filters %}
+{% load markup %}
 {% load i18n %}
 
 {% block title %}
@@ -79,7 +80,7 @@
                         {% endif %}
                         </a>
                         <h2><a href="/addon/{{addon.id}}/">{{addon.name}}</a></h2>
-                        <p>{{addon.description|truncate_chars:120}}</p>
+                        <p>{{addon.description|safe|truncate_chars:120}}</p>
                     </div>
 		</li>
 		{% endfor %}

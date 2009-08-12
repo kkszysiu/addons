@@ -343,6 +343,23 @@ def add_version(request, id):
         return render_to_response('main/msg.html', {'user': request.user, 'msg': _('Oops! Something went wrong.'), 'redirect_to': "/"})
 
 @login_required(redirect_field_name='/login/')
+def delete_screenshots(request, addon_id):
+    addon = get_object_or_404(Addon, pk=addon_id)
+    is_author = False
+    if request.user.is_authenticated():
+        if request.user.id == addon.author.id:
+            is_author = True
+            screenshots = addon.screenshot_set.all()
+            return render_to_response('main/screenshots.html',
+                {'addon': addon, 'screenshots': screenshots, 'is_author': is_author, 'user': request.user, 'site_name': Site.objects.get_current().name})
+        else:
+            return render_to_response('main/msg.html', {'user': request.user, 'msg': _('You\'re not author of this addon.'), 'redirect_to': "/"})
+    else:
+        return render_to_response('main/msg.html', {'user': request.user, 'msg': _('Oops! Something went wrong.'), 'redirect_to': "/"})
+
+
+
+@login_required(redirect_field_name='/login/')
 def delete_screenshot(request, addon_id, screenshot_id):
     try:
         addon_id = int(addon_id)
